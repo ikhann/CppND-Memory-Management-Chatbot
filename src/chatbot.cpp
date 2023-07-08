@@ -43,8 +43,6 @@ ChatBot::~ChatBot()
     }
 }
 
-//// STUDENT CODE
-////
 ChatBot::ChatBot(const ChatBot &source) {
     std::cout << "ChatBot Copy Constructor\n";
     _currentNode = source._currentNode;
@@ -106,9 +104,6 @@ ChatBot &ChatBot::operator=(ChatBot &&source) {
 
     return *this;
 }
-
-////
-//// EOF STUDENT CODE
 
 void ChatBot::ReceiveMessageFromUser(std::string message)
 {
