@@ -34,6 +34,7 @@ ChatBot::~ChatBot()
 {
     std::cout << "ChatBot Destructor" << std::endl;
 
+
     // deallocate heap memory
     if(_image != NULL) // Attention: wxWidgets used NULL and not nullptr
     {
@@ -49,9 +50,9 @@ ChatBot::ChatBot(const ChatBot &source) {
     _currentNode = source._currentNode;
     _rootNode = source._rootNode;
     _chatLogic = source._chatLogic;
+    _chatLogic->SetChatbotHandle(this);
 
-    _image = new wxBitmap();
-    *_image = *source._image;
+    _image = new wxBitmap(*source._image);
 }
 
 ChatBot &ChatBot::operator=(const ChatBot &source) {
@@ -59,26 +60,30 @@ ChatBot &ChatBot::operator=(const ChatBot &source) {
     if (this == &source) {
         return *this;
     }
+
+    delete _image;
+    _image = new wxBitmap(*source._image);
+
     _currentNode = source._currentNode;
     _rootNode = source._rootNode;
     _chatLogic = source._chatLogic;
-    delete _image;
-    _image = new wxBitmap();
-    *_image = *source._image;
+    _chatLogic->SetChatbotHandle(this);
+
     return *this;
 }
 
 ChatBot::ChatBot(ChatBot &&source) {
     std::cout << "ChatBot Move Constructor\n";
-    _image = source._image;
+    _image = new wxBitmap(*source._image);
     _currentNode = source._currentNode;
     _rootNode = source._rootNode;
     _chatLogic = source._chatLogic;
+    _chatLogic->SetChatbotHandle(this);
 
-    source._image = nullptr;
+    source._image = NULL;
+    source._chatLogic = nullptr;
     source._currentNode = nullptr;
     source._rootNode = nullptr;
-    source._chatLogic = nullptr;
 }
 
 ChatBot &ChatBot::operator=(ChatBot &&source) {
@@ -88,15 +93,16 @@ ChatBot &ChatBot::operator=(ChatBot &&source) {
     }
 
     delete _image;
-    _image = source._image;
+    _image = new wxBitmap(*source._image);
     _currentNode = source._currentNode;
     _rootNode = source._rootNode;
     _chatLogic = source._chatLogic;
+    this->_chatLogic->SetChatbotHandle(this);
 
-    source._image = nullptr;
+    source._image = NULL;
+    source._chatLogic = nullptr;
     source._currentNode = nullptr;
     source._rootNode = nullptr;
-    source._chatLogic = nullptr;
 
     return *this;
 }
